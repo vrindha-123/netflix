@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Netflix Avengers Clone</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    .app { overflow-x: hidden; }
+    .banner {
+      position: relative;
+      height: 50vh;
+      background-size: cover;
+      background-position: center;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .banner h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .banner p {
+      width: 45%;
+      font-size: 1rem;
+      line-height: 1.3;
+      max-height: 100px;
+      overflow: hidden;
+    }
+    .row {
+      margin: 1rem;
+    }
+    .row h2 {
+      margin-left: 0.5rem;
+    }
+    .row__posters {
+      display: flex;
+      overflow-x: auto;
+      padding: 1rem 0.5rem;
+    }
+    .row__poster {
+      max-height: 200px;
+      margin-right: 10px;
+      transition: transform 0.2s;
+      border-radius: 5px;
+    }
+    .row__poster:hover {
+      transform: scale(1.08);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + ReactDOM via CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+  <script type="text/javascript">
+    const { useState, useEffect } = React;
+
+    const avengersMovies = [
+      {
+        id: 1,
+        title: "Avengers: Endgame",
+        overview: "After the devastating events of Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more.",
+        poster_path: "https://image.tmdb.org/t/p/w300/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg"
+      },
+      {
+        id: 2,
+        title: "Avengers: Infinity War",
+        overview: "As the Avengers and their allies have continued to protect the world, a new danger has emerged from the shadows: Thanos.",
+        poster_path: "https://image.tmdb.org/t/p/w300/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/bOGkgRGdhrBYJSLpXaxhXVstddV.jpg"
+      },
+      {
+        id: 3,
+        title: "The Avengers",
+        overview: "Earth's mightiest heroes must come together and learn to fight as a team to stop the mischievous Loki.",
+        poster_path: "https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/hbn46fQaRmlpBuUrEiFqv0GDL6Y.jpg"
+      },
+      {
+        id: 4,
+        title: "Avengers: Age of Ultron",
+        overview: "When Tony Stark and Bruce Banner try to jump-start a dormant peacekeeping program, things go awry.",
+        poster_path: "https://image.tmdb.org/t/p/w300/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/6MKr3KgOLmzOP6MSuZERO41Lpkt.jpg"
+      }
+    ];
+
+    function Banner({ movie }) {
+      return (
+        React.createElement('div', {
+          className: 'banner',
+          style: {
+            backgroundImage: `url(${movie.backdrop_path})`
+          }
+        },
+          React.createElement('h1', null, movie.title),
+          React.createElement('p', null, movie.overview)
+        )
+      );
+    }
+
+    function Row({ title, movies }) {
+      return (
+        React.createElement('div', { className: 'row' },
+          React.createElement('h2', null, title),
+          React.createElement('div', { className: 'row__posters' },
+            movies.map(movie =>
+              React.createElement('img', {
+                key: movie.id,
+                className: 'row__poster',
+                src: movie.poster_path,
+                alt: movie.title
+              })
+            )
+          )
+        )
+      );
+    }
+
+    function App() {
+      const [movies, setMovies] = useState([]);
+
+      useEffect(() => {
+        setMovies(avengersMovies);
+      }, []);
+
+      const randomMovie = movies.length ? movies[Math.floor(Math.random() * movies.length)] : null;
+
+      return (
+        React.createElement('div', { className: 'app' },
+          randomMovie && React.createElement(Banner, { movie: randomMovie }),
+          React.createElement(Row, { title: "Avengers Movies", movies })
+        )
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
