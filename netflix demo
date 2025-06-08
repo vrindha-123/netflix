@@ -61,28 +61,48 @@
   <!-- React + ReactDOM via CDN -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
   <script type="text/javascript">
-    const { useEffect, useState } = React;
+    const { useState, useEffect } = React;
 
-    const API_KEY = "YOUR_TMDB_API_KEY";
-    const BASE_URL = "https://api.themoviedb.org/3";
-
-    async function fetchMovies(query) {
-      const res = await axios.get(`${BASE_URL}/search/movie`, {
-        params: { api_key: API_KEY, query }
-      });
-      return res.data.results;
-    }
+    // Static Avengers movie data
+    const avengersMovies = [
+      {
+        id: 1,
+        title: "Avengers: Endgame",
+        overview: "After the devastating events of Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more.",
+        poster_path: "https://image.tmdb.org/t/p/w300/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg"
+      },
+      {
+        id: 2,
+        title: "Avengers: Infinity War",
+        overview: "As the Avengers and their allies have continued to protect the world, a new danger has emerged from the shadows: Thanos.",
+        poster_path: "https://image.tmdb.org/t/p/w300/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/bOGkgRGdhrBYJSLpXaxhXVstddV.jpg"
+      },
+      {
+        id: 3,
+        title: "The Avengers",
+        overview: "Earth's mightiest heroes must come together and learn to fight as a team to stop the mischievous Loki.",
+        poster_path: "https://image.tmdb.org/t/p/w300/RYMX2wcKCBAr24UyPD7xwmjaTn.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/hbn46fQaRmlpBuUrEiFqv0GDL6Y.jpg"
+      },
+      {
+        id: 4,
+        title: "Avengers: Age of Ultron",
+        overview: "When Tony Stark and Bruce Banner try to jump-start a dormant peacekeeping program, things go awry.",
+        poster_path: "https://image.tmdb.org/t/p/w300/4ssDuvEDkSArWEdyBl2X5EHvYKU.jpg",
+        backdrop_path: "https://image.tmdb.org/t/p/original/6MKr3KgOLmzOP6MSuZERO41Lpkt.jpg"
+      }
+    ];
 
     function Banner({ movie }) {
-      if (!movie) return null;
       return (
         React.createElement('div', {
           className: 'banner',
           style: {
-            backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie.backdrop_path}")`
+            backgroundImage: `url(${movie.backdrop_path})`
           }
         },
           React.createElement('h1', null, movie.title),
@@ -100,7 +120,7 @@
               React.createElement('img', {
                 key: movie.id,
                 className: 'row__poster',
-                src: `https://image.tmdb.org/t/p/w300/${movie.poster_path}`,
+                src: movie.poster_path,
                 alt: movie.title
               })
             )
@@ -113,14 +133,15 @@
       const [movies, setMovies] = useState([]);
 
       useEffect(() => {
-        fetchMovies("Avengers").then(setMovies);
+        // Load static movies (no API call)
+        setMovies(avengersMovies);
       }, []);
 
       const randomMovie = movies.length ? movies[Math.floor(Math.random() * movies.length)] : null;
 
       return (
         React.createElement('div', { className: 'app' },
-          React.createElement(Banner, { movie: randomMovie }),
+          randomMovie && React.createElement(Banner, { movie: randomMovie }),
           React.createElement(Row, { title: "Avengers Movies", movies })
         )
       );
